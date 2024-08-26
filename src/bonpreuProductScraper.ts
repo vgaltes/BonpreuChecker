@@ -39,20 +39,41 @@ async function scrapeProductPrice(url: string): Promise<number> {
 }
 
 export async function scrapeBonpreuProducts(): Promise<
-  { id: number; price: number }[]
+  { product_id: number; price: number }[]
 > {
   try {
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: process.env.SERVICE_USER_EMAIL!,
+      password: process.env.SERVICE_USER_PASSWORD!,
+    });
+    if (signInError) throw signInError;
+
+    const { data: user } = await supabase.auth.getUser();
+    if (!user) throw new Error("Authentication failed");
+    console.log(`Authenticated as ${JSON.stringify(user)}`);
+
     const products = await fetchProducts();
     console.log(`Fetched ${products.length} products from Supabase`);
 
-    const results = await Promise.all(
+    const productPrices = await Promise.all(
       products.map(async (product) => {
         const price = await scrapeProductPrice(product.url);
-        return { id: product.id, price };
+        return { product_id: product.id, price };
       })
     );
 
-    return results;
+    const { data, error } = await supabase
+      .from("product_prices")
+      .insert(productPrices)
+      .select();
+
+    if (error) {
+      console.error(`Error inserting product prices: ${error.message}`);
+      throw error;
+    }
+    console.log(`Inserted ${data?.length} price records`);
+
+    return productPrices;
   } catch (error) {
     console.error("Error in scrapeBonpreuProducts:", error);
     throw error;
