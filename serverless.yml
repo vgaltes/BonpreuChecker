@@ -1,0 +1,25 @@
+service: bonpreu-checker
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  scheduledTask:
+    handler: src/handler.run
+    events:
+      - schedule: cron(0 22 ? * MON *) # 23:00 CET is 22:00 UTC
+
+custom:
+  serverlessPluginTypescript:
+    tsConfigFileLocation: "./tsconfig.json"
+
+package:
+  individually: true
