@@ -1,13 +1,12 @@
 import { ScheduledHandler } from "aws-lambda";
-import { scrapeBonpreuProductPrice } from "./bonpreuProductScraper";
+import { scrapeBonpreuProducts } from "./bonpreuProductScraper";
 
 export const run: ScheduledHandler = async () => {
   console.log("Scheduled task running at:", new Date().toISOString());
 
   try {
-    const price = await scrapeBonpreuProductPrice();
-
-    console.log(`Current price: ${price}`);
+    const prices = await scrapeBonpreuProducts();
+    console.log("Scraped prices:", prices);
   } catch (error) {
     console.error("Error scraping website:", error);
   }

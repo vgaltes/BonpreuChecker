@@ -1,8 +1,10 @@
-import { scrapeBonpreuProductPrice } from "../src/bonpreuProductScraper";
+import { scrapeBonpreuProducts } from "../src/bonpreuProductScraper";
 
 describe("run function", () => {
   it("calls scrapeBonpreuProductPrice and logs the price", async () => {
-    const price = await scrapeBonpreuProductPrice();
-    expect(price).toBe(6.95);
+    const productPrices = await scrapeBonpreuProducts();
+    expect(productPrices).toBeDefined();
+    expect(productPrices).not.toHaveLength(0);
+    expect(productPrices[0]["price"]).toBe(6.95);
   });
 });
