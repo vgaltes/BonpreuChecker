@@ -4,7 +4,6 @@
   "description": "Serverless scheduled app running every Monday at 23:00 CET",
   "main": "handler.js",
   "scripts": {
-    "deploy": "serverless deploy",
     "test": "jest",
     "debug:scraper": "ts-node debugScraper.ts",
     "deploy:stage": "serverless deploy --stage stage",
