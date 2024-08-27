@@ -22,11 +22,21 @@ ChartJS.register(
   Legend
 );
 
+interface Price {
+  created_at: string;
+  price: number;
+}
+
+interface Product {
+  name: string;
+  // Add other product properties as needed
+}
+
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const [product, setProduct] = useState(null);
-  const [prices, setPrices] = useState([]);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [prices, setPrices] = useState<Price[]>([]);
 
   useEffect(() => {
     if (id) {
