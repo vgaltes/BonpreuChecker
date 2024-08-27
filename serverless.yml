@@ -5,8 +5,24 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs18.x
-  region: eu-west-1
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'dev'} # Use CLI option or default to 'dev'
+  region: eu-west-1 # Specify your preferred region
+
+  environment:
+    SUPABASE_URL: ${ssm:/${self:service}/${self:provider.stage}/supabase-url}
+    SUPABASE_KEY: ${ssm:/${self:service}/${self:provider.stage}/supabase-key~true}
+    SERVICE_USER_EMAIL: ${ssm:/${self:service}/${self:provider.stage}/service-user-email}
+    SERVICE_USER_PASSWORD: ${ssm:/${self:service}/${self:provider.stage}/service-user-password~true}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:GetParameters
+          Resource:
+            - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:service}/${self:provider.stage}/*
 
 plugins:
   - serverless-plugin-typescript

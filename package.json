@@ -6,7 +6,9 @@
   "scripts": {
     "deploy": "serverless deploy",
     "test": "jest",
-    "debug:scraper": "ts-node debugScraper.ts"
+    "debug:scraper": "ts-node debugScraper.ts",
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.2",
