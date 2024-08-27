@@ -6,13 +6,13 @@ provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'} # Use CLI option or default to 'dev'
-  region: eu-west-1 # Specify your preferred region
+  region: eu-west-1 # Specify your preferred regionç
 
   environment:
-    SUPABASE_URL: ${ssm:/${self:service}/${self:provider.stage}/supabase-url}
-    SUPABASE_KEY: ${ssm:/${self:service}/${self:provider.stage}/supabase-key~true}
-    SERVICE_USER_EMAIL: ${ssm:/${self:service}/${self:provider.stage}/service-user-email}
-    SERVICE_USER_PASSWORD: ${ssm:/${self:service}/${self:provider.stage}/service-user-password~true}
+    SUPABASE_URL: ${ssm:/bonpreu-checker/${self:provider.stage}/supabase-url}
+    SUPABASE_KEY: ${ssm:/bonpreu-checker/${self:provider.stage}/supabase-key}
+    SERVICE_USER_EMAIL: ${ssm:/bonpreu-checker/${self:provider.stage}/service-user-email}
+    SERVICE_USER_PASSWORD: ${ssm:/bonpreu-checker/${self:provider.stage}/service-user-password}
 
   iam:
     role:
@@ -22,7 +22,7 @@ provider:
             - ssm:GetParameter
             - ssm:GetParameters
           Resource:
-            - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:service}/${self:provider.stage}/*
+            - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/bonpreu-checker/${self:provider.stage}/*
 
 plugins:
   - serverless-plugin-typescript
@@ -31,7 +31,7 @@ functions:
   scheduledTask:
     handler: src/handler.run
     events:
-      - schedule: cron(0 22 ? * MON *) # 23:00 CET is 22:00 UTC
+      - schedule: cron(0 22 * * ? *)
 
 custom:
   serverlessPluginTypescript:

@@ -7,7 +7,7 @@
     "deploy": "serverless deploy",
     "test": "jest",
     "debug:scraper": "ts-node debugScraper.ts",
-    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:stage": "serverless deploy --stage stage",
     "deploy:prod": "serverless deploy --stage prod"
   },
   "dependencies": {
