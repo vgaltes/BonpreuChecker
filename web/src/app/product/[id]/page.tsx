@@ -36,7 +36,7 @@ interface Product {
 
 export default function ProductDetail() {
   const params = useParams();
-  const id = params.id as string;
+  const id = params?.id as string;
   const [product, setProduct] = useState<Product | null>(null);
   const [prices, setPrices] = useState<Price[]>([]);
   const translate = useTranslations("ProductDetail");
