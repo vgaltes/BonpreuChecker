@@ -1,4 +1,6 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
@@ -11,6 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { useTranslations } from "next-intl";
 
 ChartJS.register(
   CategoryScale,
@@ -29,14 +32,14 @@ interface Price {
 
 interface Product {
   name: string;
-  // Add other product properties as needed
 }
 
 export default function ProductDetail() {
-  const router = useRouter();
-  const { id } = router.query;
+  const params = useParams();
+  const id = params.id as string;
   const [product, setProduct] = useState<Product | null>(null);
   const [prices, setPrices] = useState<Price[]>([]);
+  const translate = useTranslations("ProductDetail");
 
   useEffect(() => {
     if (id) {
@@ -49,13 +52,13 @@ export default function ProductDetail() {
     }
   }, [id]);
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <div>{translate("loading")}</div>;
 
   const chartData = {
     labels: prices.map((p) => new Date(p.created_at).toLocaleDateString()),
     datasets: [
       {
-        label: "Price",
+        label: translate("price"),
         data: prices.map((p) => p.price),
         fill: false,
         borderColor: "rgb(75, 192, 192)",
@@ -78,12 +81,13 @@ export default function ProductDetail() {
   return (
     <div>
       <h1>{product.name}</h1>
+      <h2>{translate("priceChart")}</h2>
       <Line data={chartData} options={chartOptions} />
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Price</th>
+            <th>{translate("date")}</th>
+            <th>{translate("price")}</th>
           </tr>
         </thead>
         <tbody>
