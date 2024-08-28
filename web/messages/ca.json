@@ -6,10 +6,17 @@
   "ProductDetail": {
     "loading": "Carregant...",
     "priceChart": "Gràfic de preus",
+    "priceTable": "Taula de preus",
     "date": "Data",
     "price": "Preu"
   },
   "PageLayout": {
     "title": "Observatori Bonpreu"
+  },
+  "Products": {
+    "oli_oliva": "Oli d'oliva suau Bonpreu",
+    "oli_oliva_borges": "Oli d'oliva suau Borges",
+    "oli_oliva_carbonell": "Oli d'oliva suau Carbonell",
+    "oli_oliva_la_masia": "Oli d'oliva suau La Masia"
   }
 }
