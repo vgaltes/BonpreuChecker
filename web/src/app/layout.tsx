@@ -34,7 +34,7 @@ export default async function LocaleLayout({ children }: Props) {
   return (
     <html lang={locale}>
       <head>
-        <title>next-intl</title>
+        <title>Observatori Bonpreu</title>
       </head>
       <body
         className={cn("antialiased", fontHeading.variable, fontBody.variable)}
