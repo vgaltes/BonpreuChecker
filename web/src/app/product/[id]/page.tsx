@@ -35,11 +35,24 @@ interface Product {
   name: string;
 }
 
+interface ProductStats {
+  last_price: number;
+  biggest_rise_absolute_value: number;
+  biggest_rise_percentage: number;
+  biggest_rise_date: string;
+  biggest_drop_absolute_value: number;
+  biggest_drop_percentage: number;
+  biggest_drop_date: string;
+  biggest_price_ever: number;
+  lowest_price_ever: number;
+}
+
 export default function ProductDetail() {
   const params = useParams();
   const id = params?.id as string;
   const [product, setProduct] = useState<Product | null>(null);
   const [prices, setPrices] = useState<Price[]>([]);
+  const [stats, setStats] = useState<ProductStats | null>(null);
   const translate = useTranslations("ProductDetail");
   const translateProducts = useTranslations("Products");
 
@@ -50,6 +63,7 @@ export default function ProductDetail() {
         .then((data) => {
           setProduct(data.product);
           setPrices(data.prices);
+          setStats(data.stats);
         });
     }
   }, [id]);
@@ -137,6 +151,51 @@ export default function ProductDetail() {
           </table>
         </div>
       </div>
+      {stats && (
+        <>
+          <h2 className="text-2xl font-semibold mb-4 mt-6">
+            {translate("productStats")}
+          </h2>
+          <div className="bg-card p-6 rounded-lg shadow-md mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p>
+                  <strong>{translate("lastPrice")}:</strong>{" "}
+                  {stats.last_price.toFixed(2)} €
+                </p>
+                <p>
+                  <strong>{translate("biggestPriceEver")}:</strong>{" "}
+                  {stats.biggest_price_ever.toFixed(2)} €
+                </p>
+                <p>
+                  <strong>{translate("lowestPriceEver")}:</strong>{" "}
+                  {stats.lowest_price_ever.toFixed(2)} €
+                </p>
+              </div>
+              <div>
+                <p>
+                  <strong>{translate("biggestRise")}:</strong>{" "}
+                  {stats.biggest_rise_absolute_value.toFixed(2)} € (
+                  {stats.biggest_rise_percentage.toFixed(2)}%)
+                </p>
+                <p>
+                  <strong>{translate("biggestRiseDate")}:</strong>{" "}
+                  {new Date(stats.biggest_rise_date).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>{translate("biggestDrop")}:</strong>{" "}
+                  {stats.biggest_drop_absolute_value.toFixed(2)} € (
+                  {stats.biggest_drop_percentage.toFixed(2)}%)
+                </p>
+                <p>
+                  <strong>{translate("biggestDropDate")}:</strong>{" "}
+                  {new Date(stats.biggest_drop_date).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </PageLayout>
   );
 }

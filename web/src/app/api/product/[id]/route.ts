@@ -24,7 +24,15 @@ export async function GET(
 
     if (pricesError) throw pricesError;
 
-    return NextResponse.json({ product, prices });
+    const { data: stats, error: statsError } = await supabase
+      .from("product_stats")
+      .select("*")
+      .eq("product_id", id)
+      .single();
+
+    if (statsError) throw statsError;
+
+    return NextResponse.json({ product, prices, stats });
   } catch (error) {
     console.error("Error fetching product:", error);
     return NextResponse.json(

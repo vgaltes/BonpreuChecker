@@ -8,7 +8,15 @@
     "priceChart": "Gràfic de preus",
     "priceTable": "Taula de preus",
     "date": "Data",
-    "price": "Preu"
+    "price": "Preu",
+    "productStats": "Estadístiques del producte",
+    "lastPrice": "Últim preu",
+    "biggestPriceEver": "Preu més alt",
+    "lowestPriceEver": "Preu més baix",
+    "biggestRise": "Major pujada",
+    "biggestRiseDate": "Data de la major pujada",
+    "biggestDrop": "Major baixada",
+    "biggestDropDate": "Data de la major baixada"
   },
   "PageLayout": {
     "title": "Observatori Bonpreu"
