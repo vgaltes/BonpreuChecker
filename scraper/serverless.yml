@@ -30,6 +30,7 @@ plugins:
 functions:
   scheduledTask:
     handler: src/handler.run
+    timeout: 30
     events:
       - schedule: cron(0 22 * * ? *)
 
