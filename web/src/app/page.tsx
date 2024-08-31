@@ -6,6 +6,7 @@ import Image from "next/image";
 import PageLayout from "@/components/PageLayout";
 import { api } from "@/services/api";
 import { useFetch } from "@/hooks/useFetch";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Home() {
   const { data: products, loading: productsLoading } = useFetch(
@@ -17,8 +18,7 @@ export default function Home() {
   const translate = useTranslations("Home");
   const translateProducts = useTranslations("Products");
 
-  if (productsLoading || priceChangesLoading)
-    return <div>{translate("loading")}</div>;
+  if (productsLoading || priceChangesLoading) return <LoadingSpinner />;
 
   return (
     <PageLayout>

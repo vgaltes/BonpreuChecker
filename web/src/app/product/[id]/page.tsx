@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useProductDetails } from "@/hooks/useProductDetails";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 import {
   Chart as ChartJS,
@@ -34,7 +35,7 @@ export default function ProductDetail() {
   const translate = useTranslations("ProductDetail");
   const translateProducts = useTranslations("Products");
 
-  if (loading) return <div>{translate("loading")}</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>{translate("error")}</div>;
   if (!product || !stats) return <div>{translate("notFound")}</div>;
 

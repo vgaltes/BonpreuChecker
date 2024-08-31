@@ -1,4 +1,7 @@
 {
+  "Common": {
+    "loading": "Carregant..."
+  },
   "Home": {
     "title": "Productes",
     "viewDetails": "Veure detalls",
@@ -7,7 +10,6 @@
     "biggestDrops": "Majors baixades"
   },
   "ProductDetail": {
-    "loading": "Carregant...",
     "priceChart": "Gràfic de preus",
     "priceTable": "Taula de preus",
     "date": "Data",
