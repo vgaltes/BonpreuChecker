@@ -1,7 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useProductDetails } from "@/hooks/useProductDetails";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,49 +27,16 @@ ChartJS.register(
   Legend
 );
 
-interface Price {
-  created_at: string;
-  price: number;
-}
-
-interface Product {
-  name: string;
-}
-
-interface ProductStats {
-  last_price: number;
-  biggest_rise_absolute_value: number;
-  biggest_rise_percentage: number;
-  biggest_rise_date: string;
-  biggest_drop_absolute_value: number;
-  biggest_drop_percentage: number;
-  biggest_drop_date: string;
-  biggest_price_ever: number;
-  lowest_price_ever: number;
-}
-
 export default function ProductDetail() {
   const params = useParams();
   const id = params?.id as string;
-  const [product, setProduct] = useState<Product | null>(null);
-  const [prices, setPrices] = useState<Price[]>([]);
-  const [stats, setStats] = useState<ProductStats | null>(null);
+  const { product, prices, stats, loading, error } = useProductDetails(id);
   const translate = useTranslations("ProductDetail");
   const translateProducts = useTranslations("Products");
 
-  useEffect(() => {
-    if (id) {
-      fetch(`/api/product/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProduct(data.product);
-          setPrices(data.prices);
-          setStats(data.stats);
-        });
-    }
-  }, [id]);
-
-  if (!product) return <div>{translate("loading")}</div>;
+  if (loading) return <div>{translate("loading")}</div>;
+  if (error) return <div>{translate("error")}</div>;
+  if (!product || !stats) return <div>{translate("notFound")}</div>;
 
   const maxPrice = Math.max(...prices.map((p) => p.price));
   const yAxisMax = Math.ceil(maxPrice * 1.2); // Increase the max by 20%

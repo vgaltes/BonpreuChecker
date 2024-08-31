@@ -1,51 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import PageLayout from "@/components/PageLayout";
+import { api } from "@/services/api";
+import { useFetch } from "@/hooks/useFetch";
 
-interface Product {
-  id: number;
-  name: string;
-}
-
-interface PriceChange {
-  product_id: number;
-  product_name: string;
-  change: number;
-  date: string;
-}
-
-type Props = {
-  params: { locale: string };
-};
-
-export default function Home({ params: { locale } }: Props) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [priceChanges, setPriceChanges] = useState<{
-    rises: PriceChange[];
-    drops: PriceChange[];
-  }>({ rises: [], drops: [] });
+export default function Home() {
+  const { data: products, loading: productsLoading } = useFetch(
+    api.getProducts
+  );
+  const { data: priceChanges, loading: priceChangesLoading } = useFetch(
+    api.getPriceChanges
+  );
   const translate = useTranslations("Home");
   const translateProducts = useTranslations("Products");
 
-  useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-
-    fetch("/api/price-changes")
-      .then((res) => res.json())
-      .then((data) => setPriceChanges(data));
-  }, []);
+  if (productsLoading || priceChangesLoading)
+    return <div>{translate("loading")}</div>;
 
   return (
     <PageLayout>
       <h2 className="text-xl font-semibold mb-6">{translate("title")}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div
             key={product.id}
             className="bg-card text-card-foreground rounded-lg shadow-md overflow-hidden flex flex-col"
@@ -87,7 +66,7 @@ export default function Home({ params: { locale } }: Props) {
                   {translate("biggestRises")}
                 </h3>
                 <ul className="space-y-2">
-                  {priceChanges.rises.map((rise) => (
+                  {priceChanges.rises.map((rise: any) => (
                     <li key={rise.product_id}>
                       <Link
                         href={`/product/${rise.product_id}`}
@@ -107,7 +86,7 @@ export default function Home({ params: { locale } }: Props) {
                   {translate("biggestDrops")}
                 </h3>
                 <ul className="space-y-2">
-                  {priceChanges.drops.map((drop) => (
+                  {priceChanges.drops.map((drop: any) => (
                     <li key={drop.product_id}>
                       <Link
                         href={`/product/${drop.product_id}`}
