@@ -1,22 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import Image from "next/image";
 import PageLayout from "@/components/PageLayout";
-
-type Props = {
-  params: { locale: string };
-};
 
 interface Product {
   id: number;
   name: string;
 }
 
+interface PriceChange {
+  product_id: number;
+  product_name: string;
+  change: number;
+  date: string;
+}
+
+type Props = {
+  params: { locale: string };
+};
+
 export default function Home({ params: { locale } }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
+  const [priceChanges, setPriceChanges] = useState<{
+    rises: PriceChange[];
+    drops: PriceChange[];
+  }>({ rises: [], drops: [] });
   const translate = useTranslations("Home");
   const translateProducts = useTranslations("Products");
 
@@ -24,6 +35,10 @@ export default function Home({ params: { locale } }: Props) {
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
+
+    fetch("/api/price-changes")
+      .then((res) => res.json())
+      .then((data) => setPriceChanges(data));
   }, []);
 
   return (
@@ -59,6 +74,56 @@ export default function Home({ params: { locale } }: Props) {
           </div>
         ))}
       </div>
+
+      {(priceChanges.rises.length > 0 || priceChanges.drops.length > 0) && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">
+            {translate("recentChanges")}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {priceChanges.rises.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-red-600">
+                  {translate("biggestRises")}
+                </h3>
+                <ul className="space-y-2">
+                  {priceChanges.rises.map((rise) => (
+                    <li key={rise.product_id}>
+                      <Link
+                        href={`/product/${rise.product_id}`}
+                        className="hover:underline"
+                      >
+                        {translateProducts(rise.product_name)}: +
+                        {rise.change.toFixed(2)}%
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {priceChanges.drops.length > 0 && (
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-green-600">
+                  {translate("biggestDrops")}
+                </h3>
+                <ul className="space-y-2">
+                  {priceChanges.drops.map((drop) => (
+                    <li key={drop.product_id}>
+                      <Link
+                        href={`/product/${drop.product_id}`}
+                        className="hover:underline"
+                      >
+                        {translateProducts(drop.product_name)}:{" "}
+                        {drop.change.toFixed(2)}%
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </PageLayout>
   );
 }

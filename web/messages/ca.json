@@ -1,7 +1,10 @@
 {
   "Home": {
     "title": "Productes",
-    "viewDetails": "Veure detalls"
+    "viewDetails": "Veure detalls",
+    "recentChanges": "Canvis recents (últims 30 dies)",
+    "biggestRises": "Majors pujades",
+    "biggestDrops": "Majors baixades"
   },
   "ProductDetail": {
     "loading": "Carregant...",
