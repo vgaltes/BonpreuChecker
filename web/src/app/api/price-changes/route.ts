@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabase } from "../../../lib/supabaseClient";
+import { getSecondsUntilNextUpdate } from "../../../lib/utils";
+
+export const revalidate = 0; // Disable Next.js caching
 
 export async function GET() {
   const thirtyDaysAgo = new Date();
@@ -68,7 +71,12 @@ export async function GET() {
         date: item.biggest_drop_date,
       }));
 
-    return NextResponse.json({ rises, drops });
+    const response = NextResponse.json({ rises, drops });
+    response.headers.set(
+      "Cache-Control",
+      `s-maxage=${getSecondsUntilNextUpdate()}, stale-while-revalidate`
+    );
+    return response;
   } catch (error) {
     console.error("Error fetching price changes:", error);
     return NextResponse.json(
