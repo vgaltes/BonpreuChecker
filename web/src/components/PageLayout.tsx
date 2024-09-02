@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/react";
 
 type Props = {
   children?: ReactNode;
@@ -22,6 +23,7 @@ export default function PageLayout({ children }: Props) {
         </div>
       </header>
       <main className="container mx-auto px-4 py-8">{children}</main>
+      <Analytics />
     </div>
   );
 }
