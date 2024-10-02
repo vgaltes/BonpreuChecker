@@ -11,7 +11,7 @@ export function getSecondsUntilNextUpdate() {
       now.getUTCDate(),
       23,
       0,
-      0
+      1
     )
   );
 

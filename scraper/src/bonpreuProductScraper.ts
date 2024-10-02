@@ -146,7 +146,6 @@ async function updateProductStats(
   const { error: updateError } = await supabase
     .from("product_stats")
     .update(stats)
-    //.update({ biggest_rise_percentage: stats.biggest_rise_percentage })
     .eq("product_id", productId);
 
   if (updateError)

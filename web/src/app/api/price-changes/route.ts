@@ -76,6 +76,7 @@ export async function GET() {
       "Cache-Control",
       `s-maxage=${getSecondsUntilNextUpdate()}, stale-while-revalidate`
     );
+
     return response;
   } catch (error) {
     console.error("Error fetching price changes:", error);
