@@ -143,7 +143,7 @@ async function updateProductStats(
   // Update the product_stats table
   const { error: updateError } = await supabase
     .from("product_stats")
-    .upsert({ product_id: productId, ...stats });
+    .update({ product_id: productId, ...stats });
 
   if (updateError)
     throw new Error(`Error updating product stats: ${updateError.message}`);
