@@ -56,7 +56,7 @@ export default function Home() {
 
       {(priceChanges.rises.length > 0 || priceChanges.drops.length > 0) && (
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-2xl font-semibold mb-4 mt-8">
             {translate("recentChanges")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

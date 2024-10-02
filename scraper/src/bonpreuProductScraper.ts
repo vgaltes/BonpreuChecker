@@ -126,6 +126,8 @@ async function updateProductStats(
     stats.biggest_rise_date = new Date().toISOString();
     stats.biggest_rise_from = stats.last_price;
     stats.biggest_rise_to = newPrice;
+
+    console.log(`price is bigger ${JSON.stringify(stats)}`);
   }
 
   if (priceDiff < stats.biggest_drop_absolute_value) {
@@ -143,7 +145,9 @@ async function updateProductStats(
   // Update the product_stats table
   const { error: updateError } = await supabase
     .from("product_stats")
-    .update({ product_id: productId, ...stats });
+    .update(stats)
+    //.update({ biggest_rise_percentage: stats.biggest_rise_percentage })
+    .eq("product_id", productId);
 
   if (updateError)
     throw new Error(`Error updating product stats: ${updateError.message}`);
